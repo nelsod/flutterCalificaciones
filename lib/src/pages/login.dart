@@ -1,3 +1,4 @@
+import 'package:calificaciones/src/api/auth_login.dart';
 import 'package:calificaciones/src/widgets/circle.dart';
 import 'package:calificaciones/src/widgets/inputsText.dart';
 import 'package:flutter/material.dart';
@@ -14,15 +15,26 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
 
+  var _username = '', _password = '';
+  final _authLogin = AuthLogin();
   @override
   void initState() {
     super.initState();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
   }
 
-  _submit() {
-    _formKey.currentState
+  _submit() async {
+    final isValid = _formKey.currentState
         .validate(); //Siempre asignar el fromKey al widget Form
+
+    if (isValid) {
+      final isOk = await _authLogin.loginVerificar(
+          username: _username, password: _password, context: context);
+
+      if (isOk) {
+        Navigator.pushNamed(context, 'home');
+      }
+    }
   }
 
   @override
@@ -100,6 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                                           if (RegExp(r'^[a-zA-Z0-9]+$')
                                                   .hasMatch(text) &&
                                               !text.contains("#")) {
+                                            _username = text;
                                             return null;
                                           }
                                           return 'Usuario Incorrecto';
@@ -114,6 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                                         validator: (String text) {
                                           if (text.isNotEmpty &&
                                               text.length > 5) {
+                                            _password = text;
                                             return null;
                                           }
                                           return "Contraseña Incorrecta";
