@@ -98,68 +98,72 @@ class _LoginPageState extends State<LoginPage> {
                             )
                           ],
                         ),
-                        Column(
-                          children: <Widget>[
-                            ConstrainedBox(
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: size.width * 0.09),
+                          child: Column(
+                            children: <Widget>[
+                              ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                      maxWidth: 350, minWidth: 350),
+                                  child: Form(
+                                    key: _formKey,
+                                    child: Column(
+                                      children: <Widget>[
+                                        InputText(
+                                          validator: (String text) {
+                                            if (RegExp(r'^[a-zA-Z0-9]+$')
+                                                    .hasMatch(text) &&
+                                                !text.contains("#")) {
+                                              _username = text;
+                                              return null;
+                                            }
+                                            return 'Usuario Incorrecto';
+                                          },
+                                          label: 'Usuario',
+                                        ),
+                                        SizedBox(
+                                          height: 35,
+                                        ),
+                                        InputText(
+                                          isSecured: true,
+                                          validator: (String text) {
+                                            if (text.isNotEmpty &&
+                                                text.length > 5) {
+                                              _password = text;
+                                              return null;
+                                            }
+                                            return "Contraseña Incorrecta";
+                                          },
+                                          label: 'Contraseña',
+                                        )
+                                      ],
+                                    ),
+                                  )),
+                              SizedBox(
+                                height: 70,
+                              ),
+                              ConstrainedBox(
                                 constraints: BoxConstraints(
                                     maxWidth: 350, minWidth: 350),
-                                child: Form(
-                                  key: _formKey,
-                                  child: Column(
-                                    children: <Widget>[
-                                      InputText(
-                                        validator: (String text) {
-                                          if (RegExp(r'^[a-zA-Z0-9]+$')
-                                                  .hasMatch(text) &&
-                                              !text.contains("#")) {
-                                            _username = text;
-                                            return null;
-                                          }
-                                          return 'Usuario Incorrecto';
-                                        },
-                                        label: 'Usuario',
-                                      ),
-                                      SizedBox(
-                                        height: 35,
-                                      ),
-                                      InputText(
-                                        isSecured: true,
-                                        validator: (String text) {
-                                          if (text.isNotEmpty &&
-                                              text.length > 5) {
-                                            _password = text;
-                                            return null;
-                                          }
-                                          return "Contraseña Incorrecta";
-                                        },
-                                        label: 'Contraseña',
-                                      )
-                                    ],
+                                child: CupertinoButton(
+                                  padding: EdgeInsets.symmetric(vertical: 17),
+                                  color: Colors.greenAccent,
+                                  borderRadius: BorderRadius.circular(5),
+                                  child: Text(
+                                    "Iniciar sesion",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w400),
                                   ),
-                                )),
-                            SizedBox(
-                              height: 50,
-                            ),
-                            ConstrainedBox(
-                              constraints:
-                                  BoxConstraints(maxWidth: 350, minWidth: 350),
-                              child: CupertinoButton(
-                                padding: EdgeInsets.symmetric(vertical: 17),
-                                color: Colors.greenAccent,
-                                borderRadius: BorderRadius.circular(5),
-                                child: Text(
-                                  "Iniciar sesion",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w400),
+                                  onPressed: () => _submit(),
                                 ),
-                                onPressed: () => _submit(),
                               ),
-                            ),
-                            SizedBox(
-                              height: size.height * 0.12,
-                            )
-                          ],
+                              SizedBox(
+                                height: size.height * 0.155,
+                              )
+                            ],
+                          ),
                         )
                       ],
                     ),

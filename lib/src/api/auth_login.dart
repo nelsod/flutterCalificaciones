@@ -31,13 +31,13 @@ class AuthLogin {
         final usuario = new Usuarios.fromJsonList(listDecoded);
       } else {
         throw PlatformException(
-            code: '500', details: 'Credenciales Incorrectas. Intente Otra Vez');
+            code: '500', message: 'Credenciales Incorrectas. Intente Otra Vez');
       }
     } on PlatformException catch (error) {
       Dialogs.alert(
         context,
         title: 'Error',
-        message: 'Hola',
+        message: error.message,
       );
       return false;
     }
