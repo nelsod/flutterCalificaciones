@@ -20,7 +20,7 @@
 #.vscode/
 
 # Flutter/Dart/Pub related
-
+*.dart_tool
 # Web related
 
 
