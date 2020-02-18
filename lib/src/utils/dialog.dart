@@ -14,7 +14,9 @@ class Dialogs {
             ),
             content: Text(
               message,
-              style: TextStyle(fontWeight: FontWeight.w300, fontSize: 15),
+              textAlign: TextAlign.justify,
+              style: TextStyle(
+                  fontWeight: FontWeight.w300, fontSize: 15, height: 1.2),
             ),
             actions: <Widget>[
               FlatButton(

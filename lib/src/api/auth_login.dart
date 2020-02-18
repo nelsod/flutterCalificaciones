@@ -21,17 +21,19 @@ class AuthLogin {
 
       final decodedData = jsonDecode(resp.body);
 
-      int hasCode = decodedData.hashCode;
+      final isValid = decodedData;
 
-      if (hasCode == 1) {
+      if (isValid is bool) {
+        throw PlatformException(
+            code: '500', message: 'Credenciales Incorrectas. Intente Otra Vez');
+      } else {
         var listDecoded = [];
 
         decodedData.forEach((k, v) => listDecoded.add(decodedData));
 
         final usuario = new Usuarios.fromJsonList(listDecoded);
-      } else {
-        throw PlatformException(
-            code: '500', message: 'Credenciales Incorrectas. Intente Otra Vez');
+
+        return true;
       }
     } on PlatformException catch (error) {
       Dialogs.alert(
