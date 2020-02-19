@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:calificaciones/src/models/login_model.dart';
 import 'package:calificaciones/src/utils/dialog.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,9 +29,6 @@ class AuthLogin {
         var listDecoded = [];
 
         decodedData.forEach((k, v) => listDecoded.add(decodedData));
-
-        final usuario = new Usuarios.fromJsonList(listDecoded);
-
         return true;
       }
     } on PlatformException catch (error) {
@@ -43,5 +39,24 @@ class AuthLogin {
       );
       return false;
     }
+  }
+
+  Future<List<Usuario>> loginDatos(
+      {@required String username,
+      @required String password,
+      BuildContext context}) async {
+    final url = _url + '/login/$username/$password';
+
+    final resp = await http.get(url);
+
+    final decodedData = jsonDecode(resp.body);
+
+    var listDecoded = [];
+
+    decodedData.forEach((k, v) => listDecoded.add(decodedData));
+
+    final users = new Usuarios.fromJsonList(listDecoded);
+
+    return users.usuarios;
   }
 }
