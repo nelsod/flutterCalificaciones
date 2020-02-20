@@ -16,7 +16,10 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
 
   var _username = '', _password = '';
+  List<String> arguments = new List();
   final _authLogin = AuthLogin();
+  var _isFetching = false;
+
   @override
   void initState() {
     super.initState();
@@ -24,15 +27,26 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _submit() async {
+    if (_isFetching) return;
+
     final isValid = _formKey.currentState
         .validate(); //Siempre asignar el fromKey al widget Form
 
     if (isValid) {
+      setState(() {
+        _isFetching = true;
+      });
       final isOk = await _authLogin.loginVerificar(
           username: _username, password: _password, context: context);
 
+      final usuario =
+          await _authLogin.loginDatos(username: _username, password: _password);
+
+      _isFetching = false;
+
       if (isOk) {
-        Navigator.pushNamed(context, 'home');
+        arguments.add(usuario[0].nombreUsuario);
+        Navigator.pushNamed(context, 'home', arguments: arguments);
       }
     }
   }
@@ -55,7 +69,10 @@ class _LoginPageState extends State<LoginPage> {
                 right: -size.width * 0.22,
                 top: -size.width * 0.35,
                 child: Circle(
-                  colors: [Colors.lightGreenAccent, Colors.greenAccent],
+                  colors: [
+                    Color.fromRGBO(142, 82, 243, 1.0),
+                    Color.fromRGBO(80, 114, 243, 1.0),
+                  ],
                   radius: size.width * 0.45,
                 ),
               ),
@@ -63,7 +80,10 @@ class _LoginPageState extends State<LoginPage> {
                 left: -size.width * 0.15,
                 top: -size.width * 0.34,
                 child: Circle(
-                  colors: [Colors.blueAccent, Colors.lightBlueAccent],
+                  colors: [
+                    Color.fromRGBO(70, 162, 248, 1.0),
+                    Color.fromRGBO(80, 114, 243, 1.0),
+                  ],
                   radius: size.width * 0.35,
                 ),
               ),
@@ -88,8 +108,15 @@ class _LoginPageState extends State<LoginPage> {
                                   borderRadius: BorderRadius.circular(15.0),
                                   boxShadow: [
                                     BoxShadow(
-                                        color: Colors.black26, blurRadius: 18)
+                                        color: Colors.black26, blurRadius: 20)
                                   ]),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15.0),
+                                child: Image(
+                                  image: AssetImage('assets/logo.jpeg'),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
                             ),
                             Text(
                               "Bienvenido",
@@ -147,14 +174,24 @@ class _LoginPageState extends State<LoginPage> {
                                 constraints: BoxConstraints(
                                     maxWidth: 350, minWidth: 350),
                                 child: CupertinoButton(
-                                  padding: EdgeInsets.symmetric(vertical: 17),
+                                  padding: EdgeInsets.all(0.0),
                                   color: Colors.greenAccent,
                                   borderRadius: BorderRadius.circular(5),
-                                  child: Text(
-                                    "Iniciar sesion",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w400),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 101, vertical: 17),
+                                    decoration: BoxDecoration(
+                                        gradient: LinearGradient(colors: [
+                                      Color.fromRGBO(70, 162, 248, 1.0),
+                                      Color.fromRGBO(80, 114, 243, 1.0),
+                                      Color.fromRGBO(142, 82, 243, 1.0),
+                                    ])),
+                                    child: Text(
+                                      "Iniciar sesion",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w400),
+                                    ),
                                   ),
                                   onPressed: () => _submit(),
                                 ),
@@ -170,6 +207,18 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
+              _isFetching
+                  ? Positioned.fill(
+                      child: Container(
+                        color: Colors.black45,
+                        child: Center(
+                          child: CupertinoActivityIndicator(
+                            radius: 15,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(),
             ],
           ),
         ),

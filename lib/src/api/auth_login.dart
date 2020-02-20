@@ -51,12 +51,18 @@ class AuthLogin {
 
     final decodedData = jsonDecode(resp.body);
 
-    var listDecoded = [];
+    final isValid = decodedData;
 
-    decodedData.forEach((k, v) => listDecoded.add(decodedData));
+    if (!(isValid is bool)) {
+      var listDecoded = [];
 
-    final users = new Usuarios.fromJsonList(listDecoded);
+      decodedData.forEach((k, v) => listDecoded.add(decodedData));
 
-    return users.usuarios;
+      final users = new Usuarios.fromJsonList(listDecoded);
+
+      return users.usuarios;
+    } else {
+      return [];
+    }
   }
 }
